@@ -1,4 +1,4 @@
-# N-Puzzle-solver-program-assignment-2
+# N-Queens-solver-program-assignment-2
 
 ## Input
 

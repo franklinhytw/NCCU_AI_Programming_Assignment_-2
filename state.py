@@ -2,7 +2,7 @@ class State:
     greedy_evaluation = None
     AStar_evaluation = None
     heuristic = None
-    goal = []
+    total_queens = 1
     
     def __init__(self, state, parent, direction, depth, cost):
         self.state = state
@@ -20,6 +20,10 @@ class State:
         if self.state == self.goal:
             return True
         return False
+
+    def put_queen(self):
+        self.total_queens += 1
+        pass
         
     #heuristic function based on Manhattan distance
     def Manhattan_Distance(self ,n): 
