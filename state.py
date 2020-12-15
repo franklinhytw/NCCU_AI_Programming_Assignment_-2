@@ -3,11 +3,11 @@ class State:
     AStar_evaluation = None
     heuristic = None
     total_queens = 1
+    max_queens = 8 #8x8
     
-    def __init__(self, state, parent, direction, depth, cost):
+    def __init__(self, state, parent, depth, cost):
         self.state = state
         self.parent = parent
-        self.direction = direction
         self.depth = depth
 
         if parent:
@@ -17,7 +17,7 @@ class State:
             self.cost = cost
          
     def test(self): #check if the given state is goal
-        if self.state == self.goal:
+        if self.total_queens == self.max_queens:
             return True
         return False
 
@@ -40,41 +40,62 @@ class State:
         return(self.greedy_evaluation, self.AStar_evaluation)
 
                     
-    @staticmethod
-    
-    #this would remove illegal moves for a given state
-    def available_moves(x,n): 
-        moves = ['Left', 'Right', 'Up', 'Down']
-        if x % n == 0:
-            moves.remove('Left')
-        if x % n == n-1:
-            moves.remove('Right')
-        if x - n < 0:
-            moves.remove('Up')
-        if x + n > n*n - 1:
-            moves.remove('Down')
+    def isAtaccked(self, board, n):
+        r = []
+        c = []
+        size = 0
+        for i in range(n):
+            for j in range(n):
+                if(board[i][j] == 1):
+                    if i in r or j in c:
+                        return True
+                    else:
+                        r.append(i)
+                        c.append(j)
+                        size+=1
+        
+        for count in range(size-1):
+            distance_pre = abs(r[count] - c[count])
+            distance_next = abs(r[count+1] - c[count+1])
+            if distance_pre == distance_next:
+                return True
+        
+        return False
 
-        return moves
+    #put the one queen for next step
+    def available_next_step(self, state, n):
+        r = []
+        c = []
+        state_list = []
+        
+        for i in range(n):
+            for j in range(n):
+                if(state[i][j] != 1):
+                    tmp_state = state
+                    tmp_state[i][j] = 1
+                    if not self.isAtaccked(tmp_state, n):
+                        state_list.append(tmp_state)
+                    
+        return state_list
 
     #produces children of a given state
-    def expand(self , n): 
-        x = self.state.index(0)
-        moves = self.available_moves(x,n)
+    def expand(self, n): 
+        moves = self.available_next_step(self.state, n)
         
         children = []
-        for direction in moves:
-            temp = self.state.copy()
-            if direction == 'Left':
-                temp[x], temp[x - 1] = temp[x - 1], temp[x]
-            elif direction == 'Right':
-                temp[x], temp[x + 1] = temp[x + 1], temp[x]
-            elif direction == 'Up':
-                temp[x], temp[x - n] = temp[x - n], temp[x]
-            elif direction == 'Down':
-                temp[x], temp[x + n] = temp[x + n], temp[x]
+        # for direction in moves:
+        #     temp = self.state.copy()
+        #     if direction == 'Left':
+        #         temp[x], temp[x - 1] = temp[x - 1], temp[x]
+        #     elif direction == 'Right':
+        #         temp[x], temp[x + 1] = temp[x + 1], temp[x]
+        #     elif direction == 'Up':
+        #         temp[x], temp[x - n] = temp[x - n], temp[x]
+        #     elif direction == 'Down':
+        #         temp[x], temp[x + n] = temp[x + n], temp[x]
         
         
-            children.append(State(temp, self, direction, self.depth + 1, 1)) #depth should be changed as children are produced
+        #     children.append(State(temp, self, self.depth + 1, 1)) #depth should be changed as children are produced
         return children
 
     #gets the given state and returns it's direction + it's parent's direction till there is no parent

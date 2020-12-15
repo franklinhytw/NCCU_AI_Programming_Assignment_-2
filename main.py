@@ -17,6 +17,28 @@ def print_puzzle(puzzle):
         tmp_counter = tmp_counter+1
     print()
 
+def isAtaccked(board, n):
+    r = []
+    c = []
+    size = 0
+    for i in range(n):
+        for j in range(n):
+            if(board[i][j] == 1):
+                if i in r or j in c:
+                    return True
+                else:
+                    r.append(i)
+                    c.append(j)
+                    size+=1
+        
+    for count in range(size-1):
+        distance_pre = abs(r[count] - c[count])
+        distance_next = abs(r[count+1] - c[count+1])
+        if distance_pre == distance_next:
+            return True
+        
+    return False
+
 if __name__ == '__main__':
     # initial state
     # n = int(input("Enter n\n"))
@@ -25,9 +47,6 @@ if __name__ == '__main__':
     # for i in range(0,n*n):
     #     p = int(input())
     #     root.append(p)
-    
-    # n = 3
-    # root = [0,1,2,7,6,4,3,8,5]
 
     n = 8
     init_state = [
@@ -36,12 +55,17 @@ if __name__ == '__main__':
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0]
     ]
+    
+    q_list = isAtaccked(init_state, n)
 
     # root = []
+    
+    # root = State(init_state, None, 0, 0)
+    
 
     # random initial state generator
     # while len(root) < 16:
@@ -57,7 +81,9 @@ if __name__ == '__main__':
     #
     # print_puzzle(State.goal)
     
-    print("Please wait..... \n")
+    # print("Please wait..... \n")
+    
+    # root.expand(n)
     #
     # start_time = time()
     # IDS_solution = IDS(root, n)

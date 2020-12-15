@@ -6,7 +6,7 @@ from sys import maxsize
 
 
 def DLS(given_state, n, depth):
-    root = State(given_state, None, None, 0, 0)
+    root = State(given_state, None, 0, 0)
     if root.test():
         return root.solution()
     frontier = Queue()
