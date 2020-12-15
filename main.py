@@ -17,27 +17,6 @@ def print_puzzle(puzzle):
         tmp_counter = tmp_counter+1
     print()
 
-def isAtaccked(board, n):
-    r = []
-    c = []
-    size = 0
-    for i in range(n):
-        for j in range(n):
-            if(board[i][j] == 1):
-                if i in r or j in c:
-                    return True
-                else:
-                    r.append(i)
-                    c.append(j)
-                    size+=1
-        
-    for count in range(size-1):
-        distance_pre = abs(r[count] - c[count])
-        distance_next = abs(r[count+1] - c[count+1])
-        if distance_pre == distance_next:
-            return True
-        
-    return False
 
 if __name__ == '__main__':
     # initial state
@@ -55,12 +34,14 @@ if __name__ == '__main__':
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0]
     ]
-    
-    q_list = isAtaccked(init_state, n)
+
+    root = State(init_state, None, 0, 0)
+    q_list = root.available_next_step(n)
+    print(q_list)
 
     # root = []
     

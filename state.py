@@ -39,44 +39,61 @@ class State:
         
         return(self.greedy_evaluation, self.AStar_evaluation)
 
-                    
     def isAtaccked(self, board, n):
-        r = []
-        c = []
-        size = 0
+        queen_list = []
+
         for i in range(n):
             for j in range(n):
-                if(board[i][j] == 1):
-                    if i in r or j in c:
-                        return True
-                    else:
-                        r.append(i)
-                        c.append(j)
-                        size+=1
-        
-        for count in range(size-1):
-            distance_pre = abs(r[count] - c[count])
-            distance_next = abs(r[count+1] - c[count+1])
-            if distance_pre == distance_next:
-                return True
-        
+                if (board[i][j] == 1):
+                    for queen in queen_list:
+                        if queen[0] == i or queen[1] == j:
+                            return True
+                        else:
+                            queen_list.append((i, j))
+
+        for ci in range(len(queen_list)):
+            for cj in range(ci + 1, len(queen_list)):
+                distance_pre = abs(queen_list[ci][0] - queen_list[cj][0])
+                distance_next = abs(queen_list[ci][1] - queen_list[cj][1])
+                if distance_pre == distance_next:
+                    return True
+
         return False
 
     #put the one queen for next step
-    def available_next_step(self, state, n):
-        r = []
-        c = []
-        state_list = []
+    def available_next_step(self, n):
+        x_list = []
+        y_list = []
+        x_avail_list = []
+        y_avail_list = []
+        queen_list = []
+        available_position = []
         
         for i in range(n):
             for j in range(n):
-                if(state[i][j] != 1):
-                    tmp_state = state
-                    tmp_state[i][j] = 1
-                    if not self.isAtaccked(tmp_state, n):
-                        state_list.append(tmp_state)
+                if(self.state[i][j] == 1):
+                    x_list.append(i)
+                    y_list.append(j)
+                    queen_list.append((i,j))
+
+        for count in range(n):
+            if count not in x_list:
+                x_avail_list.append(count)
+            if count not in y_list:
+                y_avail_list.append(count)
+
+        print(x_avail_list)
+        print(y_avail_list)
+
+        for 
+        # for ci in range(len(queen_list)):
+        #     for cj in range(ci + 1, len(queen_list)):
+        #         distance_pre = abs(queen_list[ci][0] - queen_list[cj][0])
+        #         distance_next = abs(queen_list[ci][1] - queen_list[cj][1])
+        #         if distance_pre == distance_next:
+        #             return True
                     
-        return state_list
+        return available_position
 
     #produces children of a given state
     def expand(self, n): 
