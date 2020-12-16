@@ -98,27 +98,83 @@ void solve(vector<uint16_t> &arg_init_queen) {
     putQueen(board);
 }
 
+void expand(SQR &board) {
+    vector<tuple<uint8_t, uint8_t>> combination_list, queen_list;
+
+    vector<uint8_t> x_list, y_list, x_avail_list, y_avail_list;
+
+    size_t count = board.size();
+    for (size_t x = 0 ; x < count ; x++) {
+        for (size_t y = 0 ; y < count ; y++) {
+            if(board[x][y] == 1) {
+                x_list.push_back(x);
+                x_list.push_back(y);
+                tuple<uint8_t, uint8_t> tp(x,y);
+                queen_list.push_back(tp);
+            }
+        }
+        printf("\n");
+    }
+
+    for (size_t ct = 0 ; ct < count ; ct++) {
+        auto itx = find(x_list.begin(), x_list.end(), ct);
+        if (itx == x_list.end()) {
+            x_avail_list.push_back(ct);
+        }
+
+        auto ity = find(y_list.begin(), y_list.end(), ct);
+        if (ity == y_list.end()) {
+            y_avail_list.push_back(ct);
+        }
+    }
+
+    for (const auto &x : x_avail_list) {
+        for (const auto &y : y_avail_list) {
+            tuple<uint8_t, uint8_t> tp(x,y);
+            combination_list.push_back(tp);
+        }
+    }
+
+    for (const auto &queen : queen_list) {
+        for (const auto &comb : combination_list) {
+            uint8_t distance_pre = abs(get<0>(queen) - get<0>(comb));
+            uint8_t distance_next = abs(get<1>(queen) - get<1>(comb));
+
+            if (distance_pre == distance_next) {
+                for (size_t cp = 0 ; cp < combination_list.size() ; cp++) {
+                    if(get<0>(comb) == get<0>(combination_list.at(cp)) && get<1>(comb) == get<1>(combination_list.at(cp))) {
+                        cout << "FUNC" << endl;
+                        combination_list.erase(combination_list.begin()+cp);
+                    }
+                }
+            }
+        }
+    }
+
+    for (const auto &comb : combination_list) {
+        printf("(%u,%u), ", get<0>(comb), get<1>(comb));
+    }
+
+}
+
 int main(int argc, char const *argv[]) {
-    uint8_t n = 8;
-    
-    vector<uint16_t> init_queen {1,3,0,0,0,0,0,0};
-    solve(init_queen);
-    
     // 1 2 4 8 16 32 64 128 
     
-    // SQR init_state {
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {1, 0, 0, 0, 0, 0, 0, 0}
-    // };
+    SQR init_state {
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 0, 0, 0, 0, 0, 0}
+    };
 
-    // cout << "Initial State:" << endl;
-    // printBoard(init_state);
+    cout << "Initial State:" << endl;
+    printBoard(init_state);
+
+    expand(init_state);
 
     return 0;
 }
