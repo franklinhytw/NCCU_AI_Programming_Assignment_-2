@@ -70,7 +70,7 @@ class State:
         
         for i in range(n):
             for j in range(n):
-                if(state[i][j] != 1):
+                if(state[i][j] == 1):
                     tmp_state = state
                     tmp_state[i][j] = 1
                     if not self.isAtaccked(tmp_state, n):
