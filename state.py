@@ -1,3 +1,4 @@
+import copy
 class State:
     greedy_evaluation = None
     AStar_evaluation = None
@@ -5,10 +6,11 @@ class State:
     total_queens = 1
     max_queens = 8 #8x8
     
-    def __init__(self, state, parent, depth, cost):
+    def __init__(self, state, parent, put_queen, depth, cost):
         self.state = state
         self.parent = parent
         self.depth = depth
+        self.put_queen = put_queen
 
         if parent:
             self.cost = parent.cost + cost
@@ -17,13 +19,13 @@ class State:
             self.cost = cost
          
     def test(self): #check if the given state is goal
-        if self.total_queens == self.max_queens:
+        if self.depth == 7:
             return True
         return False
 
-    def put_queen(self):
-        self.total_queens += 1
-        pass
+    # def put_queen(self):
+    #     self.total_queens += 1
+    #     pass
         
     #heuristic function based on Manhattan distance
     def Manhattan_Distance(self ,n): 
@@ -48,9 +50,9 @@ class State:
                     for queen in queen_list:
                         if queen[0] == i or queen[1] == j:
                             return True
-                        else:
-                            queen_list.append((i, j))
-
+                        
+                    queen_list.append((i, j))
+ 
         for ci in range(len(queen_list)):
             for cj in range(ci + 1, len(queen_list)):
                 distance_pre = abs(queen_list[ci][0] - queen_list[cj][0])
@@ -62,13 +64,17 @@ class State:
 
     #put the one queen for next step
     def available_next_step(self, n):
+        combination_list = []
+        
+        if self.isAtaccked(self.state, n):
+            return combination_list
         x_list = []
         y_list = []
         x_avail_list = []
         y_avail_list = []
         queen_list = []
-        available_position = []
         
+        # Find all of quuen position
         for i in range(n):
             for j in range(n):
                 if(self.state[i][j] == 1):
@@ -81,48 +87,48 @@ class State:
                 x_avail_list.append(count)
             if count not in y_list:
                 y_avail_list.append(count)
+                
+        for xx in x_avail_list:
+            for yy in y_avail_list:
+                combination_list.append((xx,yy))
+                
+        for queen in queen_list:
+            for comb in combination_list:
+                distance_pre = abs(queen[0] - comb[0])
+                distance_next = abs(queen[1] - comb[1])
+                
+                # print(queen[0], queen[1], comb[0], comb[1], distance_pre, distance_next)
+                if distance_pre == distance_next:
+                    combination_list.remove(comb)
 
-        print(x_avail_list)
-        print(y_avail_list)
+        return combination_list
 
-        for 
-        # for ci in range(len(queen_list)):
-        #     for cj in range(ci + 1, len(queen_list)):
-        #         distance_pre = abs(queen_list[ci][0] - queen_list[cj][0])
-        #         distance_next = abs(queen_list[ci][1] - queen_list[cj][1])
-        #         if distance_pre == distance_next:
-        #             return True
-                    
-        return available_position
-
-    #produces children of a given state
     def expand(self, n): 
-        moves = self.available_next_step(self.state, n)
-        
+        pos_list = self.available_next_step(n)
+
         children = []
-        # for direction in moves:
-        #     temp = self.state.copy()
-        #     if direction == 'Left':
-        #         temp[x], temp[x - 1] = temp[x - 1], temp[x]
-        #     elif direction == 'Right':
-        #         temp[x], temp[x + 1] = temp[x + 1], temp[x]
-        #     elif direction == 'Up':
-        #         temp[x], temp[x - n] = temp[x - n], temp[x]
-        #     elif direction == 'Down':
-        #         temp[x], temp[x + n] = temp[x + n], temp[x]
-        
-        
-        #     children.append(State(temp, self, self.depth + 1, 1)) #depth should be changed as children are produced
+               
+        for pos in pos_list:
+            # copy list to another memory address
+            # such as C++: 'memcpy'
+            temp = copy.deepcopy(self.state) # Oh! Deeper and Harder~~
+
+            x = pos[0]
+            y = pos[1]
+            temp[x][y] = 1
+            
+            children.append(State(temp, self, pos, self.depth + 1, 1)) #depth should be changed as children are produced
+
         return children
 
-    #gets the given state and returns it's direction + it's parent's direction till there is no parent
+    
     def solution(self):
         solution = []
-        solution.append(self.direction)
+        solution.append(self.put_queen)
         path = self
         while path.parent != None:
             path = path.parent
-            solution.append(path.direction)
+            solution.append(path.put_queen)
         solution = solution[:-1]
         solution.reverse()
         return solution

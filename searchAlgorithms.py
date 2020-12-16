@@ -4,9 +4,8 @@ from queue import Queue
 from queue import LifoQueue
 from sys import maxsize
 
-
 def DLS(given_state, n, depth):
-    root = State(given_state, None, 0, 0)
+    root = State(given_state, None, None, 0, 0)
     if root.test():
         return root.solution()
     frontier = Queue()
@@ -24,10 +23,12 @@ def DLS(given_state, n, depth):
         
         children = current_node.expand(n)
         for child in children:
-            if child.state not in explored:
-                if child.test():
-                    return child.solution(), len(explored)
-                frontier.put(child)
+            # if children == 7:
+            # # if child.state not in explored:
+            if child.test():
+                return child.solution(), len(explored)
+            frontier.put(child)
+
     return (False, len(explored))
     
 def IDS(given_state , n):

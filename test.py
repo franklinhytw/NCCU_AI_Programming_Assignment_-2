@@ -13,6 +13,4 @@ if __name__ == '__main__':
                 print(num, end=" | ")
             else:
                 print(num, end="| ")
-        print()    
-        
-    
+        print()  

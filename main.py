@@ -3,19 +3,15 @@ from state import State
 from time import time
 from random import *
 
-def print_puzzle(puzzle):
-    tmp_counter = 0
-    for num in puzzle:
-        if tmp_counter >= n:
-            print()
-            tmp_counter = 0
-            
-        if num > 9:
-            print(num, end=' | ')
-        else:
-            print(num, end='  | ')
-        tmp_counter = tmp_counter+1
-    print()
+def print_board(board):
+    n = len(board)
+    for i in range(n):
+        for j in range(n):
+            if board[i][j] == 1:
+                print('Q',end="|")
+            else:
+                print(' ',end="|")
+        print()
 
 
 if __name__ == '__main__':
@@ -32,16 +28,33 @@ if __name__ == '__main__':
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0]
     ]
+    # TEST
+    # init_state = [
+    #     [1, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 1],
+    #     [0, 1, 0, 0, 0, 0, 0, 0],
+    #     [0, 0, 0, 0, 1, 0, 0, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 0],
+    #     [0, 0, 0, 1, 0, 0, 0, 0],
+    #     [0, 0, 0, 0, 0, 0, 0, 0]
+    # ]
 
-    root = State(init_state, None, 0, 0)
-    q_list = root.available_next_step(n)
-    print(q_list)
+    print("Initial State:")
+    print_board(init_state)
+    print()
+    
+    # root = State(init_state, None, None, 0, 0)
+    # q_list = root.expand(n)
+    # for q_state in q_list:
+    #     print_board(q_state.state)
+    #     print("\n\n", end="")
 
     # root = []
     
@@ -66,8 +79,15 @@ if __name__ == '__main__':
     
     # root.expand(n)
     #
+    start_time = time()
+    IDS_solution = solve(init_state, n)
+    IDS_time = time() - start_time
+    print('IDS Solution is ', IDS_solution[0])
+    print('STEP:', len(IDS_solution[0]))
+    print('Number of explored nodes is ', IDS_solution[1])
+    print('IDS Time:%.4fms' % (IDS_time*1000), "\n")
     # start_time = time()
-    # IDS_solution = IDS(root, n)
+    # IDS_solution = IDS(init_state, n)
     # IDS_time = time() - start_time
     # print('IDS Solution is ', IDS_solution[0])
     # print('STEP:', len(IDS_solution[0]))
