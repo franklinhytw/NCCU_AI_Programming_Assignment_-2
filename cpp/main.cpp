@@ -1,15 +1,17 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <tuple>
 #include <math.h>
 #include <algorithm>
+#include <set>
+#include <cstdlib>
 
-#define SQR               vector<ST_BOARD>
 #define QUUEN_LIST_STRUCT vector<tuple<uint8_t, uint8_t>>
 
 using namespace std;
 
-typedef vector<uint16_t> ST_BOARD;
+typedef vector<uint8_t> ST_BOARD;
 
 void printBoard(ST_BOARD &board) {
     size_t count = board.size();
@@ -53,79 +55,74 @@ bool isAttcked(ST_BOARD &board) {
             if (it != board.end()) return true;
             else {
                 int start_dis = i-0;
-                
             }
         }
     }
 }
 
-void putQueen(ST_BOARD &board) {
-    uint16_t queen_index = 0;
-    // ST_BOARD queen_index; // start from zero
+bool solve(ST_BOARD arg_init_queen, int8_t index, uint8_t queen_pos) {
+    if(index >= 0) arg_init_queen.at((int)index) = queen_pos;
+    // (index, queen_pos)
+    unordered_map<uint8_t, uint8_t> q_mapping;
 
-    // find the quuen
-    for (size_t i = 0 ; i < board.size() ; i++) {
-        if(board.at(i) > 0) {
-            queen_index = i;
-            break;
-            // queen_index.push_back(i);
+    // find the queen then save to mapping
+    for (size_t t = 0 ; t < arg_init_queen.size() ; t++) {
+        if(arg_init_queen.at(t)) {
+            q_mapping.insert(pair<uint8_t, uint8_t>(t, arg_init_queen.at(t)));
         }
     }
 
-    for (size_t i = queen_index+1 ; i < board.size() ; i++) {
-        
-    }
+    uint8_t n = arg_init_queen.size();
 
-    for (size_t i = 0 ; i < board.size() ; i++) {
-        auto it = find(queen_index.begin(), queen_index.end(), i);
-        if (it != queen_index.end()) continue;
+    if(q_mapping.size() == n) return true;
 
-        ST_BOARD unavailable_state; 
-        for (const auto &qi : queen_index) {
-            uint8_t cur_num = (uint8_t)(1 << qi-1);
+    // solving problem
+    for (size_t t = 0 ; t < n ; t++) {
+        auto it = q_mapping.find(t);
+        if(it == q_mapping.end()) {
+            //select queen of position:
+            for (size_t num = 1 ; num <= n ; num++) {
+                // check if available
+                bool is_attacked = false;
+                for(const auto &q : q_mapping) {
+                    uint8_t cp1 = abs(q.first - (uint8_t)t);
+                    uint8_t cp2 = abs(q.second - (uint8_t)num);
+                    printf("%u:%u:%u:%u:%u\n", num, q.first, q.second, cp1,cp2);
+                    if(num == q.second || cp1 == cp2) {
+                        is_attacked = true;
+                        break;
+                    }
+                }
+                if(is_attacked) continue;
+                else {
+                    //# put the queen
+                    return solve(arg_init_queen, (int)t, num);
+                }
+            }
         }
     }
-    // for (size_t q = 0 ; q < queen_index.size()-1 ; q++) {
-    //     for (size_t s = q+1 ; s < queen_index.size() ; s++) {
-    //         if(queen_index.at(q) )
-    //     }
-    // }
-}
-
-void solve(ST_BOARD &arg_init_queen) {
-    // transfer to binary mode
-    ST_BOARD board;
-
-    for (const auto &pos : arg_init_queen) {
-        board.push_back((uint8_t)(1 << pos-1));
-    }
-
-    for (const auto &pos : board) {
-        cout << (int)pos << ",";
-    }
-    cout << endl;
-
-    // putQueen(board);
+    return false;
 }
 
 int main(int argc, char const *argv[]) {
     // uint8_t n = 8;
     
-    ST_BOARD init_queen {3,0,0,0,0,0,0,0};
+    ST_BOARD init_queen {4,0,0,0,0,0,0,0};
     printBoard(init_queen);
-    solve(init_queen);
+    bool ans = solve(init_queen, -1, 0);
+    cout << ans << endl;
     
     // 1 2 4 8 16 32 64 128 
     
     // SQR init_state {
     //     {0, 0, 0, 0, 0, 0, 0, 0},
     //     {0, 0, 0, 0, 0, 0, 0, 0},
+    //     {Q, 0, 0, 0, 0, 0, 0, 0},
     //     {0, 0, 0, 0, 0, 0, 0, 0},
     //     {0, 0, 0, 0, 0, 0, 0, 0},
     //     {0, 0, 0, 0, 0, 0, 0, 0},
     //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {0, 0, 0, 0, 0, 0, 0, 0},
-    //     {1, 0, 0, 0, 0, 0, 0, 0}
+    //     {0, 0, 0, 0, 0, 0, 0, 0}
     // };
 
     // cout << "Initial State:" << endl;
