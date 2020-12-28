@@ -105,9 +105,9 @@ int randomInteger(int min, int max) {
 }
 
 void problem(ST_BOARD &board) {
-    cout << "===== INITIAL STATE =====" << endl;
+    cout << "========== INITIAL STATE ==========" << endl;
     printBoard(board);
-    cout << "=========================" << endl;
+    cout << "===================================" << endl;
 
     bool rs = solve(board, -1, 0);
     if (rs) {
