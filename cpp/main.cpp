@@ -74,7 +74,10 @@ bool solve(ST_BOARD arg_init_queen, int8_t index, uint8_t queen_pos) {
 
     uint8_t n = arg_init_queen.size();
 
-    if(q_mapping.size() == n) return true;
+    if(q_mapping.size() == n) {
+        printBoard(arg_init_queen);
+        return true;
+    }
 
     // solving problem
     for (size_t t = 0 ; t < n ; t++) {
@@ -87,7 +90,7 @@ bool solve(ST_BOARD arg_init_queen, int8_t index, uint8_t queen_pos) {
                 for(const auto &q : q_mapping) {
                     uint8_t cp1 = abs(q.first - (uint8_t)t);
                     uint8_t cp2 = abs(q.second - (uint8_t)num);
-                    printf("%u:%u:%u:%u:%u\n", num, q.first, q.second, cp1,cp2);
+                    // printf("%u:%u:%u:%u:%u\n", num, q.first, q.second, cp1,cp2);
                     if(num == q.second || cp1 == cp2) {
                         is_attacked = true;
                         break;
@@ -96,7 +99,9 @@ bool solve(ST_BOARD arg_init_queen, int8_t index, uint8_t queen_pos) {
                 if(is_attacked) continue;
                 else {
                     //# put the queen
-                    return solve(arg_init_queen, (int)t, num);
+                    if(solve(arg_init_queen, (int)t, num)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -107,10 +112,9 @@ bool solve(ST_BOARD arg_init_queen, int8_t index, uint8_t queen_pos) {
 int main(int argc, char const *argv[]) {
     // uint8_t n = 8;
     
-    ST_BOARD init_queen {4,0,0,0,0,0,0,0};
+    ST_BOARD init_queen {3,0,0,0,0,0,0,0};
     printBoard(init_queen);
     bool ans = solve(init_queen, -1, 0);
-    cout << ans << endl;
     
     // 1 2 4 8 16 32 64 128 
     
