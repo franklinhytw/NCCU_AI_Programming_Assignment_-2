@@ -151,14 +151,5 @@ int main(int argc, char const *argv[]) {
 		}
 		exit(EXIT_SUCCESS);
     }
-    
-    // uint8_t n = 8;
-    
-    // ST_BOARD init_queen {3,0,0,0,0,0,0,0};
-    // ST_BOARD init_queen {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    // printBoard(init_queen);
-    // bool ans = solve(init_queen, -1, 0);
-    // cout << ans << endl;
-
     return 0;
 }
