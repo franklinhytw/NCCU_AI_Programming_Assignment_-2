@@ -1,17 +1,15 @@
 # N-Queens-solver-program-assignment-2
 
 ## Input
-
-
-#### Default
 ```
- n = 3
- initial_state = [0, 2, 3, 1, 4, 5, 8, 7, 6]
+Usage: [MODE]
+  -random ${n}          n = >4 number
+  -init_state ${state}  $state example: '0,0,0,0,0,0,3,0'
+``` 
 
- n = 4
- initial_state = [1, 2, 3, 4, 13, 14, 5, 6, 12, 11, 15, 0, 10, 9, 8, 7]
 ```
- 
+
+```
 ## Output
  
 ```

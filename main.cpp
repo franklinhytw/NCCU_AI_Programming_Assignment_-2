@@ -7,8 +7,6 @@
 #include <cstring>
 #include <random>
 
-#define QUUEN_LIST_STRUCT vector<tuple<uint8_t, uint8_t>>
-
 using namespace std;
 
 typedef vector<uint8_t> ST_BOARD;
@@ -42,11 +40,12 @@ bool solve(ST_BOARD arg_init_queen, int8_t index, uint8_t queen_pos) {
     uint8_t n = arg_init_queen.size();
 
     if(q_mapping.size() == n) {
-        cout << "====== GOAL STATE =======" << endl;
+        cout << "============ GOAL STATE ===========" << endl;
         printBoard(arg_init_queen);
-        cout << "=========================" << endl;
+        cout << "===================================" << endl;
         return true;
     }
+
     // solving problem
     for (size_t t = 0 ; t < n ; t++) {
         auto it = q_mapping.find(t);
@@ -66,13 +65,13 @@ bool solve(ST_BOARD arg_init_queen, int8_t index, uint8_t queen_pos) {
                 }
                 if(is_attacked) continue;
                 else {
-                    //# put the queen
+                    // # put the queen
                     if(solve(arg_init_queen, (int8_t)t, num)) {
                         return true;
                     }
                 }
             }
-            // if no select any position, should be return previous index to select another position of queen
+            // if no select any position, should be return previous index to select another position of queen.
             return false;
         }
     }
@@ -98,7 +97,7 @@ vector<string> split(const string& str) {
 
 int randomInteger(int min, int max) {
     random_device rd;
-	mt19937_64 generator = mt19937_64(rd());
+	mt19937 generator = mt19937(rd());
 	uniform_int_distribution<int> distribution(min, max);
 
 	return distribution(generator);
